@@ -1,5 +1,5 @@
 # run.py
-from  Mixture_Descriptors import mixture_descriptors_to_csv
+from  MixtureMetrics import mixture_descriptors_to_csv
 
 # Example usage
 # 1- Change the file path of descriptors and concentrations files and output files directory accordingly.    
