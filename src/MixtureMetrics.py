@@ -87,7 +87,7 @@ def order_mw (descriptors_file_path, concentrations_file_path):
     is_descriptors_1stcolumn_numeric = all(isinstance(val, (int, float)) for val in sorted_descriptors_nd[1:, 0])
       
     
-    # Check if the 1st Column of descriptors file is numeric (contains only digits) first Convert to integers and then  convert to str
+    # Check if the 1st Column of descriptors file is numeric (contains only digits) first Convert to integers and then convert to str
     if is_descriptors_1stcolumn_numeric:
         sorted_descriptors_nd[1:, 0] = [int(col) for col in  sorted_descriptors_nd[1:, 0]]  
         sorted_descriptors_nd[1:, 0] = [str(col) for col in  sorted_descriptors_nd[1:, 0]]  
@@ -328,18 +328,18 @@ def diff_mult ( descriptors, concentrations ):
     
     
     # Iterate through the rows (num_mixtures) of mult array and if they have more than 2 non-zero concentration values use for loop over num_descriptors and do np.subtract.reduce() of descriptors in mult array with non-epsilon 
-    # And elif there is only one non-zero concentration values, copy pasrt the descriptors value of that component
+    # And elif there is only one non-zero concentration values, copy paste the descriptors value of that component, HomoPolymer.
     for i in range(num_mixtures): 
 
         row =  concentrations[i]
-        non_zero_indices = np.nonzero(row)  # Find non-zero indices in the row
+        non_zero_indices = np.nonzero(row)  # Find non-zero indices in the row (in each mixture)
 
         
         num_non_zero_component = len(non_zero_indices[0])
       
         mult_row =  mult[i]
  
-        mult_non_zero_indices = np.nonzero(mult_row)  # Find non-zero indices in the row
+        mult_non_zero_indices = np.nonzero(mult_row)  # Find non-zero indices in the mult row
  
        
         # Check if the row has 2 or more non-zero elements
@@ -378,7 +378,7 @@ def diff_mult ( descriptors, concentrations ):
             non_zero_index = non_zero_indices[0]
          
             
-            # Find the index of the non-zero element in homopolymer and copy past the descriptors of the component int the diff output
+            # Find the index of the non-zero element in homopolymer and copy paste the descriptors of the component int the diff output
             difference[i] = descriptors [ non_zero_index]
             
     # print ("difference ",  pd.DataFrame(difference).to_csv('diff_mult.csv'))  
@@ -392,10 +392,7 @@ def diff_descriptors (descriptors, concentrations):
     concentrations = concentrations.astype(float)
     descriptors  = descriptors.astype(float)
        
-    mask = mask_concentration(concentrations)
-    # print ("mask[:, np.newaxis, :] shape ", mask[:, np.newaxis, :].shape) 
-    # print ("descriptors.T[np.newaxis shape ", descriptors.T[np.newaxis, :, :].shape) 
-    
+    mask = mask_concentration(concentrations)   
     difference = diff_mult ( descriptors, mask )
         
     return difference
@@ -450,7 +447,7 @@ def sqr_diff(descriptors, concentrations):
                     mult [i][j][k] += epsilon 
     
     # Iterate through the rows (num_mixtures) of mult array and if they have more than 2 non-zero concentration values use for loop over num_descriptors and do np.subtract.reduce() of descriptors in mult array with non-epsilon 
-    # And elif there is only one non-zero concentration values, copy pasrt the descriptors value of that component
+    # And elif there is only one non-zero concentration values, copy paste the descriptors value of that component, HomoPolymer,
     for i in range(num_mixtures): 
      
         row =  concentrations[i]
@@ -478,7 +475,7 @@ def sqr_diff(descriptors, concentrations):
             for j in range (num_descriptors):
                 
                 # Checks if there is at least one element in the array non_zero_values_reshape[j] that is not equal to epsilon
-                if np.any(non_zero_values_reshape[j] != epsilon):    # or if np.all(non_zero_values_reshape[j] == epsilon): 
+                if np.any(non_zero_values_reshape[j] != epsilon):   
                     
                     sub_sub_diff = np.subtract.reduce([x for x in non_zero_values_reshape[j] if x != epsilon]) 
                   
@@ -502,7 +499,7 @@ def sqr_diff(descriptors, concentrations):
             # Find the index row  of the component  in descriptors
             non_zero_index = non_zero_indices[0]
                                 
-            # Find the index of the non-zero element in homopolymer and copy past the descriptors of the component int the diff output
+            # Find the index of the non-zero element in homopolymer and copy paste the descriptors of the component int the diff output
             difference[i] = descriptors [ non_zero_index]
             squared_diff [i]  = difference[i]            
     
@@ -510,11 +507,24 @@ def sqr_diff(descriptors, concentrations):
 
 # Return the absolute of difference of all descriptors of pure components of each mixtures (|Da - Db|)
 def abs_diff(descriptors, concentrations): 
+    
     num_mixtures = concentrations.shape[0]
     num_descriptors = descriptors.shape[1]    
-    diffs = diff_descriptors (descriptors, concentrations)    
+    diffs = diff_descriptors (descriptors, concentrations)       
     absolute_diff = np.abs (diffs)
     absolute_diff = np.reshape(absolute_diff, (num_mixtures,num_descriptors))
+    
+    mask = mask_concentration(concentrations) 
+    for i in range (num_mixtures):
+        
+        non_zero_indices = np.nonzero(mask[i])  # Find non-zero indices for each mixture mask array
+        num_non_zero_component = len(non_zero_indices[0])
+        
+        # if HomoPolymer
+        if num_non_zero_component == 1: 
+                        
+            non_zero_index = non_zero_indices[0]
+            absolute_diff [i] = descriptors [ non_zero_index]
     
     return absolute_diff
         
@@ -596,7 +606,22 @@ def norm_cont (descriptors, concentrations):
     mult_reshape = np.reshape(mult, (num_mixtures, num_descriptors, num_components))
     square_mult = np.square(mult_reshape)
     sum_square_mult = np.sum(square_mult , axis= 2)
+    
     normcont = np.sqrt(sum_square_mult)
+    
+    num_mixtures = concentrations.shape[0] 
+      
+    # Iterate through the rows
+    for i in range(num_mixtures):
+        
+        row =  concentrations[i]
+        non_zero_indices = np.nonzero(row)
+        num_non_zero = np.count_nonzero(row)
+        
+        # Check if the row has only 1 non-zero element (HomoPolymer)   
+        if num_non_zero == 1: 
+            non_zero_index = non_zero_indices[0]
+            normcont[i] = descriptors [non_zero_index]
     
     return normcont
 
@@ -632,7 +657,8 @@ def diff_concentration (concentrations):
         # Check if the row  has only 1 non-zero element (HomoPolymer)   
         elif  num_non_zero == 1: 
                 
-           difference[i] = num_non_zero                  
+           difference[i] = num_non_zero 
+                           
  
     # print ("difference ",  pd.DataFrame(difference).to_csv('diff_concentration.csv'))    
     
