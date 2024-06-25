@@ -545,6 +545,7 @@ def fmol_diff (descriptors, concentrations):
     concentrations = concentrations.astype(np.float64)
     
     fmoldiff = diff_mult ( descriptors, concentrations )
+    fmoldiff = np.abs(fmoldiff)
    
     return fmoldiff
 
