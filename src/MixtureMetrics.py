@@ -175,8 +175,18 @@ def get_header_firstcolumn (descriptors_file_path, concentrations_file_path):
         return header_descriptors_reshape, column_mixtures_reshape
     
     except Exception as e:
-        print("Error occurred while loading CSV data:", e)        
+        print("Error occurred while loading CSV data:", e)     
 
+
+def validate_output_path(output_path):
+    """Check if the output path is valid and accessible."""
+    if not os.path.exists(output_path):
+        raise FileNotFoundError(f"The specified directory does not exist: {output_path}")
+    if not os.path.isdir(output_path):
+        raise NotADirectoryError(f"The specified path is not a directory: {output_path}")
+    # Optionally, you could check for write permissions
+    if not os.access(output_path, os.W_OK):
+        raise PermissionError(f"Write permission denied for the directory: {output_path}")
 
      
 # This function, get the dictionary of 12 matrices, and return the dictionary of 12 csv files path       
@@ -284,7 +294,10 @@ def write_matrices_to_csv(tabels_dict, output_path):
 
         # Return the file paths dictionary
         return file_path_dict
-
+    
+    except (FileNotFoundError, NotADirectoryError, PermissionError, ValueError) as e:
+        print(f"Error: {e}")
+    
     except Exception as e:
         print("Error occurred while writing matrices to CSV:", e)
 
