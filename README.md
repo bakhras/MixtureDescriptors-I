@@ -43,7 +43,7 @@ from MixtureMetrics import mixture_descriptors_to_csv
 # Define file paths
 descriptors_file_path = 'path/to/descriptors.csv'
 mole_fraction_file_path = 'path/to/mole_fraction.csv'
-output_directory = 'path/to/output_directory'   # if output path string is empty or None and not provided, it defaults to use the current working directory 
+output_directory = 'path/to/output_directory'  # if output path string is empty or None and not provided,it defaults to use the current working directory and if the provided folder is not existed it creates a folder in the given path or in  working directory
 
 # Call the function
 mixture_descriptors_to_csv(descriptors_file_path, mole_fraction_file_path, output_directory)
