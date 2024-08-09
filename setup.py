@@ -6,13 +6,13 @@ with open ('README.md', 'r' )   as f:
 
 setup(
     name='MixtureMetrics',
-    version='1.1.2',
+    version='1.1.5',
     packages=find_packages( where = "src"),
     package_dir={'': 'src'},
     description='MixtureMetrics: A Comprehensive Package to Develop Additive Numerical Features to Describe Complex Materials for Machine Learning Modeling',
     long_description= desscription,
     long_description_content_type='text/markdown',
-    author='Rahil Ashtari',
+    author='Rahel Mahini',
     author_email='Rahil.Ashtarimahini@ndsu.edu',
     url='https://github.com/bakhras/MixtureDescriptors-I',
     license = " GPL-3.0",
