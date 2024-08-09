@@ -67,7 +67,8 @@ def order_mw (descriptors_file_path, concentrations_file_path):
     # Sort Descriotors based on the MW (descending)
     column_index = np.where(descriptors_name== 'MW')[0][0]
 
-    print ("column_index ",  column_index)
+
+
     
     descriptor_no_header = descriptors[1:]
 
@@ -76,7 +77,8 @@ def order_mw (descriptors_file_path, concentrations_file_path):
     
     sorted_descriptors = np.vstack((descriptors_name, sorted_descriptors_no_header))         
  
-    print ("concentrations first row / components name ", concentrations[0, :] )
+
+
     
     
     sorted_descriptors_nd = np.array(sorted_descriptors)
@@ -103,28 +105,17 @@ def order_mw (descriptors_file_path, concentrations_file_path):
     else:
         concentrations[0, 1:] = [str(row) for row in concentrations[0, 1:]]  # Convert to strings otherwise
     
-    print ("concentrations 2 order_mw shape ", concentrations.shape ) #(19, 10)
-    
-    print ("sorted_descriptors_nd first column type ", type(sorted_descriptors_nd[:, 0])) 
-    print ("sorted_descriptors_nd[:, 0 ] ",  sorted_descriptors_nd[:, 0])
-    print ("concentrations[ newaxis, 0, :] ",  concentrations[np.newaxis, 0, :])
-    
-    print ("concentrations 3 order_mw shape ", concentrations.shape )
     
     # Get the indices of the sorted_descriptors matrix first column that match the concentration matrix first row elememnt
     column_order = np.where(sorted_descriptors_nd[:, 0 , np.newaxis] == concentrations[np.newaxis, 0, :])[1]
    
-        
-    print ("column_order ", column_order) 
-    print ("column_order length ", len(column_order) )
-    print ("column_order type ", type (column_order)) 
+
     
     # Sort concentrations rows based on the components in the sorted descriptors
     sorted_concentrations = concentrations[:,  column_order ] 
     
     sorted_concentrations = np.column_stack((mixtures_name, sorted_concentrations))
     
-    print ("sorted_concentrations  shape ",  sorted_concentrations.shape)
    
        
     # exclude the first column (component names) and header (descriptors name) from descriptors matrix 
@@ -133,8 +124,6 @@ def order_mw (descriptors_file_path, concentrations_file_path):
     # exclude the first row (component names) and first column (mixtures name) from concentration matrix
     sorted_concentrations = sorted_concentrations[1:, 1:] 
     
-    print ("sorted_descriptors ",  pd.DataFrame(sorted_descriptors).to_csv('sorted_descriptors.csv')) 
-    print ("sorted_concentrations ",  pd.DataFrame(sorted_concentrations).to_csv('sorted_concentrations.csv')) 
             
     return sorted_descriptors, sorted_concentrations
 
@@ -336,8 +325,8 @@ def diff_mult ( descriptors, concentrations ):
              for k in range (num_components):
                  if row[k] == 0 and concentrations [i][k] > 0:
                     mult [i][j][k] += epsilon 
-    print ("mult" , mult )
-    print ("mult shape " , mult.shape  )
+
+
     
     
     # Iterate through the rows (num_mixtures) of mult array and if they have more than 2 non-zero concentration values use for loop over num_descriptors and do np.subtract.reduce() of descriptors in mult array with non-epsilon 
@@ -394,7 +383,6 @@ def diff_mult ( descriptors, concentrations ):
             # Find the index of the non-zero element in homopolymer and copy paste the descriptors of the component int the diff output
             difference[i] = descriptors [ non_zero_index]
             
-    # print ("difference ",  pd.DataFrame(difference).to_csv('diff_mult.csv'))  
     
     return difference
     
@@ -438,12 +426,10 @@ def sqr_diff(descriptors, concentrations):
     squared_diff = np.zeros ((num_mixtures, num_descriptors ))
    
     mask = mask_concentration(concentrations)
-    print ("mask shape ", mask.shape ) 
-    print ("mask  ", mask ) 
+
     
     mult = mask[:, np.newaxis, :] * descriptors.T[np.newaxis, :, :]
-    print ('mask[:, np.newaxis, :] shape' ,mask[:, np.newaxis, :].shape ) 
-    print ('descriptors.T[np.newaxis, :, :] shape' , descriptors.T[np.newaxis, :, :].shape) 
+
       
     difference = np.zeros(( num_mixtures, num_descriptors ))
 
@@ -672,8 +658,7 @@ def diff_concentration (concentrations):
                 
            difference[i] = num_non_zero 
                            
- 
-    # print ("difference ",  pd.DataFrame(difference).to_csv('diff_concentration.csv'))    
+   
     
     return difference
 
@@ -790,8 +775,6 @@ def mixture_descriptors (descriptors_file_path , concentrations_file_path):
     normcont = norm_cont (descriptors, concentrations)
     
     sorted_descriptors, sorted_concentrations = order_mw (descriptors_file_path, concentrations_file_path)
-    print ("sorted_descriptors" ,  pd.DataFrame(sorted_descriptors).to_csv('sorted_descriptors_result.csv'))
-    print ("sorted_concentrations", pd.DataFrame(sorted_concentrations).to_csv('sorted_concentrations_result.csv'))
     
     
     sqrdiff = sqr_diff(sorted_descriptors, sorted_concentrations)
@@ -826,15 +809,15 @@ def generate_new_descriptor_name (descriptors_file_path, concentrations_file_pat
     descriptors = data[0]
     
     num_descriptors = descriptors.shape[1]
-    print ("num_descriptors", num_descriptors) # 2025
+    print ("num_descriptors", num_descriptors) 
+    
     
     output = get_header_firstcolumn (descriptors_file_path, concentrations_file_path)
     
     header_name = output[0].reshape(1, -1)
     header_name = header_name[:, 1:]
-    print ("header_name shape ", header_name.shape) # (1, 2025)
-    print ("header_name type ", type(header_name))
-    print ("header_name dtype ", header_name.dtype)
+
+
     
     result = np.empty((12, num_descriptors) , dtype ='U29')
    
@@ -852,7 +835,6 @@ def generate_new_descriptor_name (descriptors_file_path, concentrations_file_pat
     
     print ('result' , result.shape)
     pd_result = pd.DataFrame(result)
-    pd_result.to_csv( r"C:/Users/RASULEVLAB/Documents/mixtureName.csv", sep=',' , header=False, index=False)
     
     result_dic = {key: values  for key , values in zip  (Mixure_names ,result )}
     
