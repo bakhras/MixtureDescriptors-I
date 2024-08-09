@@ -167,19 +167,11 @@ def get_header_firstcolumn (descriptors_file_path, concentrations_file_path):
         print("Error occurred while loading CSV data:", e)     
 
 
-def validate_output_path(output_path):
-    """Check if the output path is valid and accessible."""
-    if not os.path.exists(output_path):
-        raise FileNotFoundError(f"The specified directory does not exist: {output_path}")
-    if not os.path.isdir(output_path):
-        raise NotADirectoryError(f"The specified path is not a directory: {output_path}")
-    # Optionally, you could check for write permissions
-    if not os.access(output_path, os.W_OK):
-        raise PermissionError(f"Write permission denied for the directory: {output_path}")
+
 
      
 # This function, get the dictionary of 12 matrices, and return the dictionary of 12 csv files path       
-def write_matrices_to_csv(tabels_dict, output_path):
+def write_matrices_to_csv(tabels_dict, output_path=None):
     
     average = tabels_dict["centroid"] 
     sqrdiff = tabels_dict["sqr_diff"]  
@@ -209,6 +201,9 @@ def write_matrices_to_csv(tabels_dict, output_path):
     moldevsqr_df = pd.DataFrame(moldevsqr)
       
     try:
+        if output_path is None or output_path == "":
+            output_path = os.getcwd()
+
         # Create the output directory if it doesn't exist
         os.makedirs(output_path, exist_ok=True)
 
