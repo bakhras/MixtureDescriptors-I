@@ -18,19 +18,27 @@ The main function, mixture_descriptors_to_csv, processes these inputs and genera
 Ensure you have Python 3.x installed. You will also need `pip` to install the package.
 
 ### Installation
+You can install the package in two different ways depending on whether you want to install from the local directory or directly from PyPI:
 
-1. **Download the Package:**
-   - Clone the repository or download the ZIP file from GitHub.
-   - Extract the contents of the ZIP file.
+Option 1: Install from Local Directory
+   1. **Download the Package:**
+      - Clone the repository or download the ZIP file from GitHub.
+      - Extract the contents of the ZIP file.
 
-2. **Install the Package:**
-   - Open a command-line interface (CLI).
-   - Navigate to the directory containing the extracted package files.
-   - Run the following command to install the package:
+   2. **Install the Package:**
+      - Open a command-line interface (CLI).
+      - Navigate to the directory containing the extracted package files.
+      - Run the following command to install the package:
 
-     ```bash
-     pip install .
-     ```
+      ```bash
+      pip install .
+      ```
+Option 2: Install from PyPI
+If you prefer to install the package directly from PyPI, you can use the following command. Make sure to replace 1.0.1 with the desired version number if needed:  
+
+   ```bash
+   pip install MixtureMetrics==1.0.1
+   ```
 
 ## Usage
 
@@ -43,7 +51,7 @@ from MixtureMetrics import mixture_descriptors_to_csv
 # Define file paths
 descriptors_file_path = 'path/to/descriptors.csv'
 mole_fraction_file_path = 'path/to/mole_fraction.csv'
-output_directory = 'path/to/output_directory'  # if output path string is empty or None and not provided,it defaults to use the current working directory and if the provided folder is not existed it creates a folder in the given path or in  working directory
+output_directory = 'path/to/output_directory'  # if output path string is empty or None and not provided,it defaults to use the current working directory and if the provided folder is not existed it creates a folder in the given path or in 1.1.5 working directory
 
 # Call the function
 mixture_descriptors_to_csv(descriptors_file_path, mole_fraction_file_path, output_directory)
