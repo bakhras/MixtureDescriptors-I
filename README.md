@@ -34,10 +34,11 @@ Option 1: Install from Local Directory
       pip install .
       ```
 Option 2: Install from PyPI
-If you prefer to install the package directly from PyPI, you can use the following command. Make sure to replace 1.0.1 with the desired version number if needed:  
+
+If you prefer to install the package directly from PyPI, you can use the following command. 
 
    ```bash
-   pip install MixtureMetrics==1.0.1
+   pip install MixtureMetrics
    ```
 
 ## Usage
@@ -59,9 +60,13 @@ mixture_descriptors_to_csv(descriptors_file_path, mole_fraction_file_path, outpu
 
 ## Arguments
 descriptors_file_path: Path to the .csv file containing individual descriptors for each component.
+
 mole_fraction_file_path: Path to the .csv file containing mole fraction values for each component in each mixture.
+
 output_directory: Directory where the 12 output .csv files will be saved.
+
 Output
+
 The code computes and saves 12 different mixture descriptors, each in its own .csv file within the specified output directory.
 
 ## Contributing
