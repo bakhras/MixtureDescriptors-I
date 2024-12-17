@@ -107,8 +107,8 @@ def order_mw (descriptors_file_path, concentrations_file_path):
 
     # Sort concentrations rows based on the components in the sorted descriptors
     sorted_concentrations = concentrations[:,  column_order ] 
+
     
-    sorted_concentrations = sorted_concentrations [:, 1:]
     
     sorted_concentrations = np.column_stack((mixtures_name, sorted_concentrations))
     
