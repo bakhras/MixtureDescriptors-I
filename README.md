@@ -59,15 +59,16 @@ mixture_descriptors_to_csv(descriptors_file_path, mole_fraction_file_path, outpu
 ```
 
 ## Arguments
-descriptors_file_path: Path to the .csv file containing individual descriptors for each component.
+- **descriptors_file_path**: Path to the `.csv` file containing individual descriptors for each component.
+  
+- **mole_fraction_file_path**: Path to the `.csv` file containing mole fraction values for each component in each mixture.
+  
+- **output_directory**: Directory where the 12 output `.csv` files will be saved.
 
-mole_fraction_file_path: Path to the .csv file containing mole fraction values for each component in each mixture.
+### Output
 
-output_directory: Directory where the 12 output .csv files will be saved.
+The code computes and saves 12 different mixture descriptors, each in its own `.csv` file within the specified output directory.
 
-Output
-
-The code computes and saves 12 different mixture descriptors, each in its own .csv file within the specified output directory.
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request if you have suggestions or improvements.

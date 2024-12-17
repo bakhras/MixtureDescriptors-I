@@ -6,7 +6,7 @@ with open ('README.md', 'r' )   as f:
 
 setup(
     name='MixtureMetrics',
-    version='1.0.2',
+    version='1.0.3',
     packages=find_packages( where = "src"),
     package_dir={'': 'src'},
     description='MixtureMetrics: A Comprehensive Package to Develop Additive Numerical Features to Describe Complex Materials for Machine Learning Modeling',
