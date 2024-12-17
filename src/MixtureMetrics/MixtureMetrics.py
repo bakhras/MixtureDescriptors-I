@@ -68,8 +68,6 @@ def order_mw (descriptors_file_path, concentrations_file_path):
     column_index = np.where(descriptors_name== 'MW')[0][0]
 
 
-
-    
     descriptor_no_header = descriptors[1:]
 
     
@@ -77,10 +75,7 @@ def order_mw (descriptors_file_path, concentrations_file_path):
     
     sorted_descriptors = np.vstack((descriptors_name, sorted_descriptors_no_header))         
  
-
-
-    
-    
+  
     sorted_descriptors_nd = np.array(sorted_descriptors)
     
     # Check if the elements in the first row are numeric
@@ -110,9 +105,10 @@ def order_mw (descriptors_file_path, concentrations_file_path):
     column_order = np.where(sorted_descriptors_nd[:, 0 , np.newaxis] == concentrations[np.newaxis, 0, :])[1]
    
 
-    
     # Sort concentrations rows based on the components in the sorted descriptors
     sorted_concentrations = concentrations[:,  column_order ] 
+    
+    sorted_concentrations = sorted_concentrations [:, 1:]
     
     sorted_concentrations = np.column_stack((mixtures_name, sorted_concentrations))
     
